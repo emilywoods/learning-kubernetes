@@ -1,0 +1,16 @@
+# A job creates one or more pods in order to carry out a batch process such as a computation
+# The pods are terminated on successful completion of the job
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: count
+spec:
+  template:
+    spec:
+      containers:
+      - name: count
+        image: centos:7
+        command: ["bin/bash", "-c", "for i in 1 2 3 4 5 ; do echo $i ; done"]
+      restartPolicy: Never
+  backoffLimit: 4
