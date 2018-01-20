@@ -1,0 +1,31 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: my-nginx
+  labels:
+    run: my-nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2 # run 2 pods matching the template
+  revisionHistoryLimit: 20
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1 #number of pods created above the desired number of pods
+      maxUnavailable: 1 #max no of pods unavailable during update
+  template: # create pods using pod definition in this template
+    metadata:
+      # unlike pod-nginx.yaml, the name is not included in the meta data as a unique name is
+      # generated from the deployment name
+      labels:
+        app: my-nginx
+    spec:
+      containers:
+      - name: my-nginx
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
