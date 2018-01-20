@@ -1,0 +1,47 @@
+# A pod is a single unit of deployment
+# It represents a single instance of a running application
+# They are disposable environments in which containers can be run
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-example
+spec:
+  containers:
+  - name: memory-demo-ctr
+  - image: centos:7
+    command: ["echo"]
+    args: ["Hello World"]
+
+    # Assign memory resources
+    resources:
+      limits:
+        memory: "200Mi"
+      requests:
+        memory: "100Mi"
+        # Args for when the container starts
+        # -mem-total 150Mi: tells the Container to attempt to allocate 150 MiB of memory
+      args:
+      - -mem-total
+      - 150Mi
+      - -mem-alloc-size
+      - 10Mi
+      - -mem-alloc-sleep
+      - 1s
+
+    # livenessProbe indicates whether container is running
+    livenessProbe:
+        httpGet:
+          # when "host" is not defined, "PodIP" will be used
+          # host: my-host
+          # when "scheme" is not defined, "HTTP" scheme will be used. Only "HTTP" and "HTTPS" are allowed
+          # scheme: HTTPS
+          path: /health
+          port: 8080
+        initialDelaySeconds: 15
+        timeoutSeconds: 1
+      name: liveness
+
+  # Assign a pod to node, with label disktype = ssd
+  nodeSelector:
+    disktype: ssd
