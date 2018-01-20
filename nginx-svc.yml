@@ -1,3 +1,5 @@
+# A Kubernetes service defines a logical set of pods and a policy by which they can be accessed
+
 apiVersion: v1
 kind: Service
 metadata:

@@ -1,3 +1,4 @@
+# Deployments provide declarative definition of desired state
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
